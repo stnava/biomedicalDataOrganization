@@ -1,21 +1,26 @@
 ---
-title: "Data organization and provenance for transparency, efficiency and reproducibility with neuroimaging and related modalities"
+title: Data organization and provenance for transparency, efficiency and reproducibility
+  with neuroimaging and related modalities
 author: "Avants"
 date: "1/2/2020"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
+urlcolor: blue
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library( pander )
-data_fn=path.expand("~/data/FTLD/example_data.csv")
+data_fn = list.files(path = "..", pattern = "example_data.csv", recursive = TRUE, full.names = TRUE )
 ```
 
 ## Introduction
 
 Rigorous organization is key to unlocking the potential of increasingly diverse and high-dimensional scientific data [https://www.sciencedirect.com/science/article/pii/S0958166918301903] and to addressing the perpetual need for reproducible analytics [https://www.pnas.org/content/115/11/2628.short].  In this document, we review concepts and resources used within the neuroimaging community to aid data organization which, in turn, promotes reproducible science.  We also propose a relatively lightweight data organization strategy that serves indexing, computational and inferential needs for clinical trial data.
+
+The source code for this document is [here](https://github.com/stnava/biomedicalDataOrganization).
 
 ## The path toward enlightened data
 
@@ -129,20 +134,10 @@ We first show how to convert DICOM data to nifti data in NRG format.  We follow 
 
 First, we generate DICOM data based on `ANTsR`.  This document (which is compilable and computes the results below) is part of the provenance of this example data.
 
-```{r}
+```{r dorecon}
 library( ANTsR )
 library( dcm2niir )
-rdir = path.expand( "~/Downloads/dataOrgExample/" )
-if ( ! exists( "dcmfns" ) ) dcmfns = rep( NA, 6 )
-for ( k in 1:length( dcmfns ) ) {
-  mytempdir = paste0( rdir, "subject", k, "/" )
-  dcmfns[k] = paste0( mytempdir, "anat.dcm" )
-  if ( ! dir.exists( mytempdir ) ) {
-    dir.create( mytempdir )
-    antsImageWrite(  antsImageClone( ri( k ), out_pixeltype = 'unsigned char'), dcmfns[k] )
-    }
-}
-
+dcmfns = paste0( "./data/subject", c(1:2), "/"  )
 myres = dcm2niir::dcm2nii( basedir=dirname( dcmfns[1]) , verbose=TRUE )
 studyID='example'
 subjectID='001'
@@ -159,9 +154,11 @@ cat( paste0( nrgDir, "/", nrgFN ) )
 
 The `myRecon` variable summarizes the execution of `dcm2niix` from within `R`.  Future work may develop this system into a well-documented `R` package.  Utilities, examples and high-level helper functions will assist in the modality/manufacturer specific issues in data conversion, permit higher frequencies of re-use and speed data organization in future efforts.
 
+One might also use the output of the above commands to identify the acquisition date.  More generally, one may derive the various variables required for the NRG format via the DICOM.
+
 **Computational Environment**: Important provenance information:
 
-```{r}
+```{r provenance}
 pander::pander( sessionInfo() )
 ```
 
@@ -169,7 +166,7 @@ pander::pander( sessionInfo() )
 
 Result of merging several different data sources.
 
-```{r}
+```{r demographics}
 myData = read.csv( data_fn )
 set.caption("Example data")
 pander( myData )
