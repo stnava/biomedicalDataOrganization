@@ -95,6 +95,12 @@ codedir=/home/avants/ADNIX/src/
 ```
 and then storing scripts within `src` and versioning them with tools like `git` and `github`.  
 
+Furthermore, we also define:
+```
+codedir=/home/avants/ADNIX/demographics/
+```
+which will contain demographics and related data (variables that should live in `csv` file) that will be matched to the imaging data.
+
 To further clarify, we may perform the following steps implemented with a mixture of scripts in the `src` directory:
 
 1.  Download raw data to the location from which it will be reorganized into NRG format:
@@ -134,7 +140,7 @@ We first show how to convert DICOM data to nifti data in NRG format.  We follow 
 
 First, we generate DICOM data based on `ANTsR`.  This document (which is compilable and computes the results below) is part of the provenance of this example data.
 
-```{r dorecon}
+```{r dorecon,message=FALSE,warning=FALSE}
 library( ANTsR )
 library( dcm2niir )
 dcmfns = paste0( "./data/subject", c(1:2), "/"  )
@@ -152,9 +158,12 @@ cat( paste0( nrgDir, "/", nrgFN ) )
 ```
 
 
-The `myRecon` variable summarizes the execution of `dcm2niix` from within `R`.  Future work may develop this system into a well-documented `R` package.  Utilities, examples and high-level helper functions will assist in the modality/manufacturer specific issues in data conversion, permit higher frequencies of re-use and speed data organization in future efforts.
+The `myRecon` variable summarizes the execution of `dcm2niix` from within `R`.  The usual workflow would be to use these results to do the reconstruction then *move* and *rename* the `nifti` and `json` data such that it fits NRG format.
 
 One might also use the output of the above commands to identify the acquisition date.  More generally, one may derive the various variables required for the NRG format via the DICOM.
+
+Future work may develop this system into a well-documented `R` package.  Utilities, examples and high-level helper functions will assist in the modality/manufacturer specific issues in data conversion, permit higher frequencies of re-use and speed data organization in future efforts.
+
 
 **Computational Environment**: Important provenance information:
 
@@ -164,7 +173,7 @@ pander::pander( sessionInfo() )
 
 ### Example of machine-learning ready indexed and merged datasets 
 
-Result of merging several different data sources.
+Result of merging several different data sources.  NOTE: this is "long" format i.e. each time point for each subject occupies one row.  Generally, this is much easier to handle the "wide" format which tries to keep all subjects' data on a single row.
 
 ```{r demographics}
 myData = read.csv( data_fn )
@@ -185,7 +194,7 @@ Common issues of consistency:
 * poor choice of separator ( as shown above ) which leads to some manageable but irritating problems with parsing.
 
 
-## Relevant Tools
+## Relevant resources
 
 * R / python for basic scripting and visualization needs
 
