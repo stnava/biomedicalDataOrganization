@@ -1,12 +1,12 @@
 ---
-title: Data organization and provenance for transparency, efficiency and reproducibility
-  with neuroimaging and related modalities
+title: Data organization and provenance for transparent, efficient and reproducible
+  analytics with neuroimaging and related modalities
 author: "Avants"
 date: "1/2/2020"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 urlcolor: blue
 ---
 
@@ -26,7 +26,7 @@ The source code for this document is [here](https://github.com/stnava/biomedical
 
 Enlighted data arises from transforming raw data into a well-curated, easily visualized and intuitively organized computation-friendly format.  
 
-**Raw data** refers to the data that we receive from an "original" resource.  This may be data off of a scanner, a dataset downloaded from a public server or, in some cases, physical samples.  One of the most critical steps in data organization in support of science/reproducibility is to record the original source of data and everything that happens to that data thereon.  This is known as "provenance" which may be defined as "descriptions of the entities and activities involved in producing and delivering or otherwise influencing a given object."  Provenance tracks the path an image may take on its journey from the scanner to inclusion as a variable(s) in a study/statistical analysis.
+**Raw data** refers to the data that we receive from an "original" resource.  This may be data off of a scanner, a dataset downloaded from a public server or, in some cases, physical samples.  One of the most critical steps in data organization in support of science/reproducibility is to record the original source of data and everything that happens to the data thereon.  This is known as "provenance" which may be defined as "descriptions of the entities and activities involved in producing and delivering or otherwise influencing a given object."  Provenance tracks the path an image may take on its journey from the scanner to inclusion as a variable(s) in a study/statistical analysis.
 
 **Well-curated** data comes with detailed provenance and is indexed by a tabular file that contains entries with established values (no surprises).  A "suprise" in a tabular file (e.g. a csv file) may be:
 
@@ -173,11 +173,11 @@ pander::pander( sessionInfo() )
 
 ### Example of machine-learning ready indexed and merged datasets 
 
-Result of merging several different data sources.  NOTE: this is "long" format i.e. each time point for each subject occupies one row.  Generally, this is much easier to handle the "wide" format which tries to keep all subjects' data on a single row.
+Result of merging several different data sources.  NOTE: this is "long" format i.e. each time point for each subject occupies one row.  Generally, this is much easier to handle the "wide" format which tries to keep all subjects' data on a single row.  The example combines and indexes both NIFD and 4RTNI in a consistent manner.  PPMI, ADNI and other datasets would be added in the same manner.
 
 ```{r demographics}
 myData = read.csv( data_fn )
-set.caption("Example data")
+set.caption("Example combination of 4RTNI and NIFD data.")
 pander( myData )
 ```
 
@@ -191,8 +191,7 @@ Common issues of consistency:
 
 * meaning of time points versus repeat data;
 
-* poor choice of separator ( as shown above ) which leads to some manageable but irritating problems with parsing.
-
+* poor choice of separator ( as might happen in the example above ) which could lead to some manageable but irritating problems with parsing.
 
 ## Relevant resources
 
