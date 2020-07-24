@@ -140,7 +140,7 @@ We first show how to convert DICOM data to nifti data in NRG format.  We follow 
 
 First, we generate DICOM data based on `ANTsR`.  This document (which is compilable and computes the results below) is part of the provenance of this example data.
 
-```{r dorecon,message=FALSE,warning=FALSE}
+```{r dorecon,message=FALSE,warning=FALSE,eval=FALSE}
 library( ANTsR )
 library( dcm2niir )
 dcmfns = paste0( "./data/subject", c(1:2), "/"  )
@@ -155,6 +155,10 @@ nrgDir = paste0( uniqueIdentifiers, collapse='/' )
 nrgFN = paste0( uniqueIdentifiers, collapse='-' )
 cat("On Disk => ")
 cat( paste0( nrgDir, "/", nrgFN ) )
+tempimg = antsImageRead(  myres$nii_after  )
+# OPTIONALLY: compute some statistics / basic data checking here
+dir.create( nrgDir, recursive = T )
+antsImageWrite( tempimg, paste0( nrgDir, "/", nrgFN ) )
 ```
 
 
@@ -181,7 +185,7 @@ set.caption("Example combination of 4RTNI and NIFD data.")
 pander( myData )
 ```
 
-It is worth looking closely at the printed table above.  This illustrates repeat data, longitudinal data, cross-sectional data and the style of tabulating such data such that we can perform inference across several different studies.  This is a relatively *minimal* example.  Other columns that might be useful would be a *baseline* indicator column, a *repeat* column and a *MRIPROTOCOL* column.  A provenance filename may also be useful.
+It is worth looking closely at the printed table above.  This illustrates repeat data, longitudinal data, cross-sectional data and the style of tabulating such data such that we can perform inference across several different studies.  This is a relatively *minimal* example.  Other columns that might be useful would be a *baseline* indicator column, a *repeat* column and a *MRIPROTOCOL* column.  A provenance filename or, in ADNI, an *ImageID* column could also prove valuable.
 
 Common issues of consistency:
 
