@@ -42,23 +42,23 @@ The NRG format is a specification for how neuroimaging data should be organized,
 ```
 basedir=/home/avants/ADNIX/data
 rootdir=${basedir}ADNI/
-t1=${rootdir}/S0001/20071131/T1-MPRAGE/000/ADNI_S0001_20071131_T1-MPRAGE_000.nii.gz
+t1=${rootdir}/S0001/20071131/T1-MPRAGE/000IMG/ADNI_S0001_20071131_T1-MPRAGE_000IMG.nii.gz
 ```
 Let us unpack the meaning of each of these branches in english:
 ```
-t1=StudyName/SubjectID/Date/Modality/Repeat/StudyName_SubjectID_Date_Modality_Repeat.extension
+t1=StudyName/SubjectID/Date/Modality/UniqueImageID/StudyName_SubjectID_Date_Modality_UniqueImageID.extension
 ```
 An associated json file would be:
 ```
-${rootdir}/S0001/20071131/T1-MPRAGE/000/ADNI_S0001_20071131_T1-MPRAGE_000.json
+${rootdir}/S0001/20071131/T1-MPRAGE/000IMG/ADNI_S0001_20071131_T1-MPRAGE_000IMG.json
 ```
 A second modality and a second repeat would follow the same style:
 ```
-dwi=${rootdir}/S0001/20090629/DWI/001/ADNI_S0001_20090629_DWI_001.nii.gz
+dwi=${rootdir}/S0001/20090629/DWI/001IMGX/ADNI_S0001_20090629_DWI_001IMGX.nii.gz
 ```
 Static genomics data could be organized in this way as well:
 ```
-snps=${rootdir}/S0001/20090629/SNPSCHIP1/000/ADNI_S0001_20090629_SNPSCHIP1_000.csv
+snps=${rootdir}/S0001/20090629/SNPSCHIP1/000G/ADNI_S0001_20090629_SNPSCHIP1_000G.csv
 ```
 While genotype does not change over time, there remains value/information in knowing when the data was collected or in associating the genotype with baseline data alone.
 Note that the date format has a given resolution that may be finer than shown here.  It is also organized such that higher values indicate a later date (this helps sort data effectively).
