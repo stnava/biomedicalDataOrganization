@@ -24,21 +24,21 @@ The source code for this document is [here](https://github.com/stnava/biomedical
 
 ## The path toward enlightened data
 
-Enlighted data arises from transforming raw data into a well-curated, easily visualized and intuitively organized computation-friendly format.  
+Enlightened data arises from transforming raw data into a well-curated, easily visualized and intuitively organized computation-friendly format.
 
-**Raw data** refers to the data that we receive from an "original" resource.  This may be data off of a scanner, a dataset downloaded from a public server or, in some cases, physical samples.  One of the most critical steps in data organization in support of science/reproducibility is to record the original source of data and everything that happens to the data thereon.  This is known as "provenance" which may be defined as "descriptions of the entities and activities involved in producing and delivering or otherwise influencing a given object."  Provenance tracks the path an image may take on its journey from the scanner to inclusion as a variable(s) in a study/statistical analysis.
+**Raw data** refers to the data that we receive from an "original" resource.  This may be data off of a scanner (often in DICOM format), a dataset downloaded from a public server or, in some cases, physical samples.  One of the most critical steps in data organization in support of science/reproducibility is to record the original source of data and everything that happens to the data thereon.  This is known as "provenance" which may be defined as "descriptions of the entities and activities involved in producing and delivering or otherwise influencing a given object."  Provenance tracks the path an image may take on its journey from the scanner to inclusion as a variable(s) in a study/statistical analysis.
 
 **Well-curated** data comes with detailed provenance and is indexed by a tabular file that contains entries with established values (no surprises).  A "suprise" in a tabular file (e.g. a csv file) may be:
 
-* a column that has no name (making it impossible to deduce the meaning of the column's values) 
-* a column of values that contains a mixture of numeric data and character data or includes disorganized strings (such as an entry that reads "I'm not sure what happened to this but it's missing" or "bad value" or "hmmm..." ) 
+* a column that has no name (making it impossible to deduce the meaning of the column's values) or a difficult to interpret name.  this is relevant to not only dataframes/excel files but also on disk data that lives within some folder structure or a database.
+* a column of values that contains a mixture of numeric data and character data or includes disorganized strings (such as an entry that reads "I'm not sure what happened to this but it's missing" or "bad value" or "hmmm..." )
 * various unpredictable forms of denoting missingness e.g. instead of consistently using the NA signature, using the blank character, the word "missing" or a value such as FALSE or -999.
 
 Well-curated data should have none of these issues and (at least in the world of `R`) should only use NA to denote missingness.
 
 An **easily visualized and intuitively organized computation-friendly format** means that data is organized in a predictable tree structure.  A tree has a root, branches and leaves.  The leaves are the end of the tree and are, ultimately, data points.  The root is the highest level of the data group.  The branches map with increasing level of specificity from the root to the leaves.  Tree structures are very amenable to computation because they can be easily searched and serve to organize and manage access to data at different points in its hierarchy.
 
-The NRG format is a specification for how neuroimaging data should be organized, on disk, in a tree.  Let us begin with an example for how a T1-weighted image may appear within a NRG-compliant directory structure:
+The NRG format is a specification for how neuroimaging data should be organized, on disk, in a tree.  It will typically take DICOM data in and produce Nifti or NRRD or another anonymized imaging file format out. Let us begin with an example for how a T1-weighted image may appear within a NRG-compliant directory structure:
 ```
 basedir=/home/avants/ADNIX/data
 rootdir=${basedir}ADNI/
@@ -52,10 +52,12 @@ An associated json file would be:
 ```
 ${rootdir}/S0001/20071131/T1-MPRAGE/000IMG/ADNI_S0001_20071131_T1-MPRAGE_000IMG.json
 ```
-A second modality and a second repeat would follow the same style:
+A second modality and a second repeat (image taken in the same session) would follow the same style:
 ```
-dwi=${rootdir}/S0001/20090629/DWI/001IMGX/ADNI_S0001_20090629_DWI_001IMGX.nii.gz
+dwi=${rootdir}/S0001/20090629/DWI/001IMGX/ADNI_S0001_20090629_DWI_383IMG.nii.gz
 ```
+Note the use of the last part of the file name (above 383IMG) which disambiguates
+images of the same type taken in the same session.
 Static genomics data could be organized in this way as well:
 ```
 snps=${rootdir}/S0001/20090629/SNPSCHIP1/000G/ADNI_S0001_20090629_SNPSCHIP1_000G.csv
@@ -67,13 +69,15 @@ The **separator**, above, is the underscore ( `_` ).  Ideally, the separator sho
 
 This -- in brief -- is the NRG format.  There are some cases that can stress the implementation of the format and may need some creativity to handle.
 
-* Naming the modality:  T1-MPRAGE or T1-MPRAGE-Echo20-GRAPPA-SIEMENS ?  This is a judgement call about level of detail; generally, however, sequence details should be available via provenance and/or in the data tables.
+* Naming the modality:  T1-MPRAGE or T1-MPRAGE-Echo20-GRAPPA-SIEMENS ?  This is a judgement call about level of detail; generally, however, sequence details should be available via provenance and/or in the data tables.  Therefore, we prefer the simpler/shorter more general T1w over a less generic T1-MPRAGE
+because not all T1 images are MPRAGE.
 
-* Handling multiple subject IDs:  ADNI raises this case as both images have IDs and subjects have IDs.  We recommend always sticking with subject IDs, if possible.
+* Handling multiple subject IDs:  ADNI raises this case as both images have IDs and subjects have IDs.  We recommend always sticking with subject IDs.  The unique image IDs should be used in the
+last place of the folder structure / image name.
 
 * Denoting "baseline", "screening", "visit number" and similar schemes: we recommend sticking with alphanumerically sortable date values and leaving these annotations to the tabular format.  However, in rare cases, we have effectively concatenated the "visit name" on to the end of a date as a workaround e.g. `20071131VISIT02`.
 
-* Is it "wrong" to store a json file in parallel to a mhd or nifti image?  Json-based provenance is the only allowable parallel data within the same directory.  However, it could be argued that it should be stored in its own directory:
+* Is it "wrong" to store a json file in parallel to a mhd or nifti image?  Json-based (or related) provenance is the only allowable parallel data within the same directory.  However, it could be argued that it should be stored in its own directory:
 ```
 ${rootdir}/S0001/20071131/T1-MPRAGE/000/Provenance/ADNI_S0001_20071131_T1-MPRAGE_000_Provenance.json
 ```
@@ -93,7 +97,7 @@ where `ADNIX/data/ADNI` contains nifti (and potentially genomics and/or psychome
 ```
 codedir=/home/avants/ADNIX/src/
 ```
-and then storing scripts within `src` and versioning them with tools like `git` and `github`.  
+and then storing scripts within `src` and versioning them with tools like `git` and `github`.
 
 Furthermore, we also define:
 ```
@@ -132,13 +136,15 @@ The code used in the steps above will not only be version controlled but may als
 Without going into further detail, we also note that the data directories, themselves, can be version controlled with tools such as `git annex` and `datalad` and the computational environment can be stored via `reprozip` (with some limitations).
 
 
-## Examples 
+## Examples
 
 We first show how to convert DICOM data to nifti data in NRG format.  We follow this with an example of tabular data that indexes several different data sources consistently.
 
 ### DICOM 2 Nifti
 
-First, we generate DICOM data based on `ANTsR`.  This document (which is compilable and computes the results below) is part of the provenance of this example data.
+In general, our first step is to convert DICOM data to well-organized NRG format with NIFTI
+images stored in our specified tree-like folder structure.
+We generate DICOM data based on `ANTsR`.  This document (which is compilable and computes the results below) is part of the provenance of this example data.
 
 ```{r dorecon,message=FALSE,warning=FALSE,eval=FALSE}
 library( ANTsR )
@@ -175,7 +181,7 @@ Future work may develop this system into a well-documented `R` package.  Utiliti
 pander::pander( sessionInfo() )
 ```
 
-### Example of machine-learning ready indexed and merged datasets 
+### Example of machine-learning ready indexed and merged datasets
 
 Result of merging several different data sources.  NOTE: this is "long" format i.e. each time point for each subject occupies one row.  Generally, this is much easier to handle the "wide" format which tries to keep all subjects' data on a single row.  The example combines and indexes both NIFD and 4RTNI in a consistent manner.  PPMI, ADNI and other datasets would be added in the same manner.
 
@@ -201,6 +207,9 @@ Common issues of consistency:
 
 ## Relevant resources
 
+There are several other resources that can assist these types of approaches
+and some are heavier than others.  See below links/references for more information.
+
 * R / python for basic scripting and visualization needs
 
 * dcm2niix, dcm2niir for converting dicom to nifti
@@ -222,14 +231,11 @@ Common issues of consistency:
 * Relevant papers
 
     * "The brain imaging data structure, a format for organizing and describing outputs of neuroimaging experiments" https://www.ncbi.nlm.nih.gov/pubmed/27326542
- 
+
     * "Best practices in data analysis and sharing in neuroimaging using MRI" https://www.ncbi.nlm.nih.gov/pubmed/28230846
-    
+
     * "Everything Matters: The ReproNim Perspective on Reproducible Neuroimaging" https://www.frontiersin.org/articles/10.3389/fninf.2019.00001/full
-    
+
     * Commentary on BIDS vs NIDM: https://www.incf.org/blog/bids-and-neuroimaging-data-model-nidm
-    
+
     * "Computational and Informatic Advances for Reproducible Data Analysis in Neuroimaging" (2019) https://www.annualreviews.org/doi/abs/10.1146/annurev-biodatasci-072018-021237
-
-
-
