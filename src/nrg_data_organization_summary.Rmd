@@ -155,8 +155,8 @@ studyID='example'
 subjectID='001'
 dateID='20071131'
 modalityID='SLICE'
-repeatID="000"
-uniqueIdentifiers = c(studyID, subjectID, dateID, modalityID, repeatID)
+uniqueImageID="000"
+uniqueIdentifiers = c(studyID, subjectID, dateID, modalityID, uniqueImageID)
 nrgDir = paste0( uniqueIdentifiers, collapse='/' )
 nrgFN = paste0( uniqueIdentifiers, collapse='-' )
 cat("On Disk => ")
@@ -191,7 +191,7 @@ set.caption("Example combination of 4RTNI and NIFD data.")
 pander( myData )
 ```
 
-It is worth looking closely at the printed table above.  This illustrates repeat data, longitudinal data, cross-sectional data and the style of tabulating such data such that we can perform inference across several different studies.  This is a relatively *minimal* example.  Other columns that might be useful would be a *baseline* indicator column, a *repeat* column and a *MRIPROTOCOL* column.  A provenance filename or, in ADNI, an *ImageID* column could also prove valuable.
+It is worth looking closely at the printed table above.  This illustrates repeat data, longitudinal data, cross-sectional data and the style of tabulating such data such that we can perform inference across several different studies.  This is a relatively *minimal* example.  Other columns that might be useful would be a *baseline* indicator column, a *unique image ID* (or repeat)  column and a *MRIPROTOCOL* column.  Storing a provenance file (eg json) could also prove valuable.
 
 Common issues of consistency:
 
