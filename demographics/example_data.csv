@@ -1,4 +1,4 @@
-"study","INDDID","phenotype","AgeatMRI","Sex","Education","AgeatBaseline","pathology","deltaTime","IsBaseline","MRIDate","imageId",'uniqueID'
+"study","INDDID","phenotype","AgeatMRI","Sex","Education","AgeatBaseline","pathology","deltaTime","IsBaseline","MRIDate","imageId","uniqueID"
 "NIFD","0001","Control",64.4904109589041,"Male",15,62.3945205479452,"Control",2.0958904109589,0,"2010-05-21","NIFD-0001-20100521-T1w-1x85zj",1x85zj
 "NIFD","0002","bvFTD",56.5945205479452,"Female",13,54.6164383561644,"Unknown",1.97808219178083,0,"2011-07-19","NIFD-0002-20110719-T1w-9u00qq",1x85zj
 "4RTNI","1_S_5093","PSP",82,"Female",12,82,"Unknown",0,1,"2014-10-21","4RTNI-1_S_5093-20141021-T1w-10000",10000
