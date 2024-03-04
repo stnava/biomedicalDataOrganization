@@ -92,6 +92,14 @@ This structured organization facilitates the systematic storage, access, and ana
 
 Full raw processing output in NRG format.  We usually focus on the "*wide.csv" representation of each modality.
 
+* csv files contain tabular summary data
+
+* png files are for reviewing image quality
+
+* nii.gz images (scalar, tensor or vector) are derived (raw) data that provides the potential for more detailed image review and additional processing.
+
+* trk are whole brain tractography data (large)
+
 ```bash
 processedCSVSRFIRST/PPMI/73716
 └── 20230105
@@ -497,3 +505,37 @@ processedCSVSRFIRST/PPMI/73716
             ├── PPMI-73716-20230105-rsfMRI-1659230_1659228-rsfcorr.csv
             └── PPMI-73716-20230105-rsfMRI-1659230_1659228-tsnr.nii.gz
 ```
+
+
+The documented data structure represents processed / derived data from the original medical imaging datasets related to the Parkinson's Progression Markers Initiative (PPMI), specifically for the patient or dataset with ID `73716`. This structured hierarchy is located under `processedCSVSRFIRST/PPMI/73716` for the time point January 5th, 2023. Here's a detailed breakdown of the organization and content of this derivative data:
+
+### Root Directory
+- `processedCSVSRFIRST/PPMI/73716`
+  - This is the base directory for processed and derivative data related to patient or dataset ID `73716`.
+
+### Date Directory
+- `20230105`
+  - Indicates that the data within was processed on January 5th, 2023.
+
+### Subdirectories and Files
+Each subdirectory under the date directory represents a different type of imaging data or analysis performed on the original data. These include DTI (Diffusion Tensor Imaging), NM2DMT, T1-weighted imaging (T1w), T1w Hierarchical, T2-FLAIR, and resting-state fMRI (rsfMRI). The derivative files provide various analyses, metrics, and visualizations relevant to neuroscience and medical research. Key aspects include:
+
+- **DTI**:
+  - Contains derivative DTI data like RGB maps, template normalized versions of images, fractional anisotropy (FA) maps and metrics, mean diffusivity (MD) maps, average b0 images, tractograms, and corrected diffusion metrics. Files are organized by original DTI scan IDs (e.g., `1659236`, `1659237`) and reference specific T1w scans for anatomical context.
+
+- **NM2DMT**:
+  - Includes averaged, normalized, and labeled NM2DMT imaging data with visualizations and metrics specific to the NM2DMT scans.
+
+- **T1w**:
+  - Derivative data from T1-weighted imaging includes brain extraction visuals, normative comparisons, cortical thickness metrics, transformation matrices, and warp files indicating registration to standard templates.
+
+- **T1w Hierarchical**:
+  - Offers an extensive set of derivative data including region-specific registrations, Jacobians, segmentation visuals, anatomical labelings, cortical and lobar parcellations, and various CSV metrics detailing brain features and statistics.
+
+- **T2Flair**:
+  - Derivatives focus on FLAIR imaging with visuals of white matter hyperintensities (WMH), prior WMH estimates, and quantitative metrics of WMH volumes.
+
+- **rsfMRI**:
+  - Provides a rich set of resting-state functional connectivity metrics, ALFF/fALFF (Amplitude of Low Frequency Fluctuations/fractional ALFF) analyses, brain mask applications, motion-corrected datasets, network correlation matrices, and task-specific connectivity maps. Files are named to indicate the specific rsfMRI scan and T1w reference, with visual and quantitative derivatives for brain function and network analysis.
+
+This structure is tailored for both basic tabular and advanced research purposes, offering a comprehensive overview of patient-specific brain structure and function through multiple imaging modalities and derived analyses. The organization facilitates easy access to specific analyses, comparisons against normative databases, and the integration of structural and functional data for in-depth study of neurological conditions.
