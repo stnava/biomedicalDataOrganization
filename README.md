@@ -1,5 +1,8 @@
 # biomedicalDataOrganization
 
+![NRG format](https://i.imgur.com/12jaKwB.jpeg)
+
+
 See the rendered document [here](https://htmlpreview.github.io/?https://github.com/stnava/biomedicalDataOrganization/blob/master/src/nrg_data_organization_summary.html)
 
 Describe ideas regarding data organization for medical imaging and related data.
